@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Launch Simulation</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="plot" style="width: 800px; height: 600px;"></div>
+
+    <script>
+        class RocketSimulation {
+            constructor(options) {
+                this.g = options.gravity || 9.81;
+                this.m = options.mass || 1000;
+                this.Cd = options.dragCoefficient || 0.5;
+                this.A = options.crossSectionalArea || 10;
+                this.rho = options.airDensity || 1.2;
+                this.dt = options.timeStep || 0.1;
+                this.initialVelocity = options.initialVelocity || 0;
+                this.initialHeight = options.initialHeight || 0;
+                this.maxTime = options.maxTime || 100;
+                this.plotContainer = options.plotContainer || 'plot';
+                this.data = [{ x: [], y: [], type: 'scatter', mode: 'lines', name: 'Height (m)' }];
+            }
+
+            acceleration(v) {
+                return -this.g - 0.5 * this.Cd * this.A * this.rho * v * Math.abs(v) / this.m;
+            }
+
+            simulate() {
+                let v = this.initialVelocity;
+                let h = this.initialHeight;
+                let t = 0;
+
+                while (h >= 0 && t <= this.maxTime) {
+                    const a = this.acceleration(v);
+                    v += a * this.dt;
+                    h += v * this.dt;
+                    t += this.dt;
+                    this.data[0].x.push(t);
+                    this.data[0].y.push(h);
+                }
+
+                this.plotData();
+            }
+
+            plotData() {
+                const layout = {
+                    title: 'Rocket Launch Simulation',
+                    xaxis: { title: 'Time (s)' },
+                    yaxis: { title: 'Height (m)' }
+                };
+                Plotly.newPlot(this.plotContainer, this.data, layout);
+            }
+        }
+
+        const simulation = new RocketSimulation({
+            initialVelocity: 0,
+            initialHeight: 0,
+            maxTime: 100,
+            plotContainer: 'plot'
+        });
+        simulation.simulate();
+    </script>
+</body>
+</html>
