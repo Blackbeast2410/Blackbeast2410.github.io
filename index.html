@@ -3,48 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rocket Launch Simulation</title>
+<title>Clock</title>
 <style>
   body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #f0f0f0;
   }
-  #rocket {
-    width: 100px;
-    height: 200px;
-    background-color: gray;
-    position: relative;
-    margin: 50px auto;
-    transition: transform 2s ease-in-out, opacity 2s ease-in-out;
-  }
-  #launchButton {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
+  #clock {
+    font-size: 36px;
+    margin-top: 50px;
   }
 </style>
 </head>
 <body>
-<div id="rocket"></div>
-<button id="launchButton" onclick="launchRocket()">Launch Rocket</button>
+<div id="clock"></div>
 
 <script>
-  function launchRocket() {
-    var rocket = document.getElementById("rocket");
-    rocket.style.transform = "translateY(-1000px)";
-    rocket.style.opacity = "0";
-    setTimeout(function() {
-      rocket.style.transform = "translateY(0)";
-      rocket.style.opacity = "1";
-      alert("Rocket has successfully launched!");
-    }, 2000);
+  function updateTime() {
+    var now = new Date();
+    var hours = now.getHours();
+    var minutes = now.getMinutes();
+    var seconds = now.getSeconds();
+    
+    hours = formatTime(hours);
+    minutes = formatTime(minutes);
+    seconds = formatTime(seconds);
+    
+    var timeString = hours + ":" + minutes + ":" + seconds;
+    document.getElementById("clock").innerText = timeString;
+    
+    setTimeout(updateTime, 1000); // Update time every second
   }
+  
+  function formatTime(time) {
+    if (time < 10) {
+      return "0" + time;
+    } else {
+      return time;
+    }
+  }
+  
+  updateTime(); // Start the clock
 </script>
 </body>
 </html>
+
