@@ -1,78 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>模拟可回收火箭发射与回收</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .rocket-container {
-            position: relative;
-        }
-        .rocket {
-            position: absolute;
-            width: 100px;
-            height: 200px;
-            background-color: #333;
-            border-radius: 10px;
-            transition: transform 2s;
-        }
-        .flame {
-            position: absolute;
-            width: 20px;
-            height: 60px;
-            background-color: orange;
-            border-radius: 50%;
-            bottom: -60px;
-            left: 40px;
-            display: none;
-        }
-        .launch {
-            transform: translateY(-400px);
-        }
-        .recover {
-            animation: shake 0.5s linear infinite;
-        }
-        @keyframes shake {
-            0% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            100% { transform: translateX(-5px); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三级火箭发射模拟</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    .rocket {
+      width: 150px;
+      height: 300px;
+      position: relative;
+      margin: 50px auto;
+    }
+    .flame {
+      width: 100%;
+      height: 30px;
+      background-color: orange;
+      position: absolute;
+      bottom: 0;
+      border-radius: 0 0 50% 50%;
+      animation: flame 0.5s infinite alternate;
+    }
+    @keyframes flame {
+      0% { transform: scaleY(1); }
+      100% { transform: scaleY(1.2); }
+    }
+  </style>
 </head>
 <body>
-    <button onclick="launchRocket()">发射火箭</button>
-    
-    <div class="rocket-container">
-        <div id="rocket" class="rocket">
-            <div class="flame"></div>
-        </div>
-    </div>
-    
-    <script>
-        function launchRocket() {
-            var rocket = document.getElementById("rocket");
-            var flame = rocket.querySelector(".flame");
-            
-            rocket.classList.add("launch");
-            flame.style.display = "block";
-            
-            setTimeout(function() {
-                // 回收火箭
-                rocket.classList.remove("launch");
-                rocket.classList.add("recover");
-                flame.style.display = "none";
-                
-                setTimeout(function() {
-                    // 重置火箭
-                    rocket.classList.remove("recover");
-                    rocket.style.transform = "translateY(0)";
-                }, 1000); // 1秒后重置火箭
-            }, 5000); // 5秒后回收火箭
-        }
-    </script>
+  <h1>三级火箭发射模拟</h1>
+  <div class="rocket">
+    <img src="rocket.png" alt="Rocket" style="width: 100%; height: 100%; object-fit: contain;">
+    <div class="flame" id="flame1"></div>
+    <div class="flame" id="flame2"></div>
+    <div class="flame" id="flame3"></div>
+  </div>
+  <button onclick="launchRocket()">发射火箭</button>
+  <button onclick="recoverRocket()">回收火箭</button>
+
+  <script>
+    function launchRocket() {
+      document.getElementById('flame1').style.height = '50px';
+      setTimeout(function() {
+        document.getElementById('flame2').style.height = '50px';
+      }, 1000);
+      setTimeout(function() {
+        document.getElementById('flame3').style.height = '50px';
+      }, 2000);
+      setTimeout(function() {
+        alert('火箭发射成功！');
+      }, 3000);
+    }
+
+    function recoverRocket() {
+      document.getElementById('flame1').style.height = '0';
+      document.getElementById('flame2').style.height = '0';
+      document.getElementById('flame3').style.height = '0';
+      alert('火箭回收成功！');
+    }
+  </script>
 </body>
 </html>
