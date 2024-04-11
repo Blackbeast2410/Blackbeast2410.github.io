@@ -1,51 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clock</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f0f0;
-  }
-  #clock {
-    font-size: 36px;
-    margin-top: 50px;
-  }
-</style>
+    <title>模拟可回收火箭发射与回收</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .rocket-container {
+            position: relative;
+        }
+        .rocket {
+            position: absolute;
+            width: 100px;
+            height: 200px;
+            background-color: #333;
+            border-radius: 10px;
+            transition: transform 2s;
+        }
+        .flame {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            background-color: orange;
+            border-radius: 50%;
+            bottom: -60px;
+            left: 40px;
+            display: none;
+        }
+        .launch {
+            transform: translateY(-400px);
+        }
+        .recover {
+            animation: shake 0.5s linear infinite;
+        }
+        @keyframes shake {
+            0% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            100% { transform: translateX(-5px); }
+        }
+    </style>
 </head>
 <body>
-<div id="clock"></div>
-
-<script>
-  function updateTime() {
-    var now = new Date();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
+    <button onclick="launchRocket()">发射火箭</button>
     
-    hours = formatTime(hours);
-    minutes = formatTime(minutes);
-    seconds = formatTime(seconds);
+    <div class="rocket-container">
+        <div id="rocket" class="rocket">
+            <div class="flame"></div>
+        </div>
+    </div>
     
-    var timeString = hours + ":" + minutes + ":" + seconds;
-    document.getElementById("clock").innerText = timeString;
-    
-    setTimeout(updateTime, 1000); // Update time every second
-  }
-  
-  function formatTime(time) {
-    if (time < 10) {
-      return "0" + time;
-    } else {
-      return time;
-    }
-  }
-  
-  updateTime(); // Start the clock
-</script>
+    <script>
+        function launchRocket() {
+            var rocket = document.getElementById("rocket");
+            var flame = rocket.querySelector(".flame");
+            
+            rocket.classList.add("launch");
+            flame.style.display = "block";
+            
+            setTimeout(function() {
+                // 回收火箭
+                rocket.classList.remove("launch");
+                rocket.classList.add("recover");
+                flame.style.display = "none";
+                
+                setTimeout(function() {
+                    // 重置火箭
+                    rocket.classList.remove("recover");
+                    rocket.style.transform = "translateY(0)";
+                }, 1000); // 1秒后重置火箭
+            }, 5000); // 5秒后回收火箭
+        }
+    </script>
 </body>
 </html>
-
